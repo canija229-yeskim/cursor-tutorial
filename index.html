@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>내 첫 웹페이지</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      line-height: 1.6;
+      background: #f4f4f5;
+      color: #111827;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    body.dark {
+      background: #111827;
+      color: #f9fafb;
+    }
+    .card {
+      max-width: 640px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      background: #ffffff;
+    }
+    body.dark .card {
+      background: #1f2937;
+      border-color: #374151;
+    }
+    .row {
+      display: flex;
+      gap: 8px;
+      margin: 10px 0;
+      flex-wrap: wrap;
+    }
+    .pricing-title {
+      margin-top: 22px;
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .plan {
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      padding: 12px;
+      background: #f9fafb;
+    }
+    body.dark .plan {
+      background: #111827;
+      border-color: #4b5563;
+    }
+    .plan h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+    .price {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .checkout-box {
+      margin-top: 14px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 12px;
+      background: #f8fafc;
+    }
+    body.dark .checkout-box {
+      background: #0f172a;
+      border-color: #475569;
+    }
+    .muted {
+      opacity: 0.8;
+      font-size: 13px;
+      margin-top: 6px;
+    }
+    .agree {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 14px;
+    }
+    button, input {
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    button {
+      border: 0;
+      cursor: pointer;
+      background: #2563eb;
+      color: #ffffff;
+    }
+    input {
+      border: 1px solid #d1d5db;
+      min-width: 220px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1 id="title">은지 사랑해 👋</h1>
+    <p>우리 가족 사랑해</p>
+    <div class="row">
+      <button onclick="hello()">눌러보기</button>
+      <button onclick="toggleDarkMode()">다크모드 전환</button>
+    </div>
+    <div class="row">
+      <input id="nameInput" type="text" placeholder="이름을 입력하세요" />
+      <button onclick="applyName()">이름 적용</button>
+    </div>
+    <h2 class="pricing-title">요금제 선택</h2>
+    <div class="pricing-grid">
+      <div class="plan">
+        <h3>Basic</h3>
+        <p class="price">월 9,900원</p>
+        <button onclick="startCheckout('Basic', 9900)">Basic 결제</button>
+      </div>
+      <div class="plan">
+        <h3>Pro</h3>
+        <p class="price">월 19,900원</p>
+        <button onclick="startCheckout('Pro', 19900)">Pro 결제</button>
+      </div>
+      <div class="plan">
+        <h3>Team</h3>
+        <p class="price">월 49,900원</p>
+        <button onclick="startCheckout('Team', 49900)">Team 결제</button>
+      </div>
+    </div>
+    <div class="checkout-box">
+      <h3>결제 준비 정보</h3>
+      <div class="row">
+        <input id="emailInput" type="email" placeholder="결제 확인용 이메일" />
+      </div>
+      <label class="agree">
+        <input id="agreeInput" type="checkbox" />
+        결제/환불 안내를 확인했습니다.
+      </label>
+      <p class="muted">현재는 테스트 단계라 실제 결제는 진행되지 않습니다.</p>
+    </div>
+    <p id="msg"></p>
+  </div>
+
+  <script>
+    function hello() {
+      document.getElementById('msg').textContent = '앱 팔아 보자';
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+    }
+
+    function applyName() {
+      const name = document.getElementById('nameInput').value.trim();
+      const title = document.getElementById('title');
+      if (!name) {
+        document.getElementById('msg').textContent = '이름을 먼저 입력해 주세요.';
+        return;
+      }
+      title.textContent = name + '님의 첫 웹앱 🚀';
+      document.getElementById('msg').textContent = '이름 적용 완료!';
+    }
+
+    function startCheckout(planName, amount) {
+      const email = document.getElementById('emailInput').value.trim();
+      const agree = document.getElementById('agreeInput').checked;
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+      if (!emailOk) {
+        document.getElementById('msg').textContent = '올바른 이메일을 입력해 주세요.';
+        return;
+      }
+      if (!agree) {
+        document.getElementById('msg').textContent = '결제/환불 안내 동의가 필요합니다.';
+        return;
+      }
+
+      document.getElementById('msg').textContent =
+        '[' + planName + '] 결제 요청 준비 완료 - ' +
+        amount.toLocaleString() + '원, 이메일: ' + email;
+    }
+  </script>
+</body>
+</html>
